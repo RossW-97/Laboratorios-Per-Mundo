@@ -8,6 +8,11 @@ export interface Product {
   growth_speed: string;
   base_price: number;
   region: string;
+  image_url?: string;
+  line: "Musáceas" | "Forestal";
+  code: string;
+  height: string;
+  tolerance: string;
 }
 
 export interface TraceabilityLog {

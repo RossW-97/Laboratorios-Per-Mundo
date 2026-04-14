@@ -14,7 +14,18 @@ import {
   AlertCircle,
   Loader2,
   Menu,
-  X
+  X,
+  ClipboardList,
+  Clock,
+  Building2,
+  User,
+  Mail,
+  Phone,
+  FlaskConical,
+  Microscope,
+  FileText,
+  ChevronRight,
+  FlaskRound
 } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -56,12 +67,14 @@ export default function App() {
   const [userRole, setUserRole] = useState<"agricultor" | "cooperativa">("agricultor");
   const [orderResult, setOrderResult] = useState<OrderResponse | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isServicesDialogOpen, setIsServicesDialogOpen] = useState(false);
+  const [activeLine, setActiveLine] = useState<"Musáceas" | "Forestal" | "">("");
 
   useEffect(() => {
     if (!showCover) {
       fetchProducts();
     }
-  }, [showCover, regionFilter, growthFilter]);
+  }, [showCover, regionFilter, growthFilter, activeLine]);
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -69,6 +82,7 @@ export default function App() {
       const params = new URLSearchParams();
       if (regionFilter) params.append("region", regionFilter);
       if (growthFilter) params.append("growth_speed", growthFilter);
+      if (activeLine) params.append("line", activeLine);
       const res = await fetch(`/api/catalogo?${params.toString()}`);
       const data = await res.json();
       setProducts(data);
@@ -104,8 +118,13 @@ export default function App() {
             transition={{ delay: 0.2, duration: 0.8 }}
           >
             <div className="flex justify-center mb-8">
-              <div className="w-24 h-24 rounded-full bg-primary/20 backdrop-blur-xl border border-primary/30 flex items-center justify-center text-primary shadow-2xl">
-                <Sprout size={48} />
+              <div className="w-32 h-32 rounded-full bg-white backdrop-blur-xl border border-primary/30 flex items-center justify-center shadow-2xl overflow-hidden p-2">
+                <img 
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKq1od6ZBRIwZuSMupZloRtyQgO7jrPgFokmtF-9jdSHK5DNep6VAPua2jPOMUn1UbnFHcFiz2Jg94_CC0zWp1GtWC6nF8I7K4rGMNA6J17O8o1WAka2CNr8c1AMF2BXHjzGu6MtxZICY-n2Ji9srsfpYavDHZZUn_EsMRymLk8D4wI_UIP1YUrBjUu8Xsi_LGSlOabrvDdytzHCkHZ7X7T4z_C5DozFO3Biv0AjIPKBJLNb1LBh9D8ElHLClRgmu5-C9ONILlaQ" 
+                  alt="Laboratorios Perú Mundo Logo" 
+                  className="w-full h-full object-contain"
+                  referrerPolicy="no-referrer"
+                />
               </div>
             </div>
             
@@ -205,16 +224,37 @@ export default function App() {
       {/* Navigation */}
       <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-border h-16 flex items-center justify-between px-6">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white">
-            <Sprout size={24} />
+          <div className="w-12 h-12 rounded-full overflow-hidden bg-white flex items-center justify-center border border-border">
+            <img 
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKq1od6ZBRIwZuSMupZloRtyQgO7jrPgFokmtF-9jdSHK5DNep6VAPua2jPOMUn1UbnFHcFiz2Jg94_CC0zWp1GtWC6nF8I7K4rGMNA6J17O8o1WAka2CNr8c1AMF2BXHjzGu6MtxZICY-n2Ji9srsfpYavDHZZUn_EsMRymLk8D4wI_UIP1YUrBjUu8Xsi_LGSlOabrvDdytzHCkHZ7X7T4z_C5DozFO3Biv0AjIPKBJLNb1LBh9D8ElHLClRgmu5-C9ONILlaQ" 
+              alt="Laboratorios Perú Mundo Logo" 
+              className="w-full h-full object-contain"
+              referrerPolicy="no-referrer"
+            />
           </div>
           <h1 className="text-xl font-bold text-primary font-headline tracking-tight">Laboratorios Perú Mundo</h1>
         </div>
         
         <nav className="hidden md:flex items-center gap-8">
-          <a href="#catalogo" className="text-sm font-semibold hover:text-primary transition-colors">Catálogo</a>
+          <button 
+            onClick={() => { setActiveLine("Forestal"); document.getElementById("catalogo")?.scrollIntoView({ behavior: "smooth" }); }}
+            className={cn("text-sm font-semibold hover:text-primary transition-colors", activeLine === "Forestal" && "text-primary border-b-2 border-primary")}
+          >
+            Línea Forestal
+          </button>
+          <button 
+            onClick={() => { setActiveLine("Musáceas"); document.getElementById("catalogo")?.scrollIntoView({ behavior: "smooth" }); }}
+            className={cn("text-sm font-semibold hover:text-primary transition-colors", activeLine === "Musáceas" && "text-primary border-b-2 border-primary")}
+          >
+            Línea Musáceas
+          </button>
+          <button 
+            onClick={() => setIsServicesDialogOpen(true)}
+            className="text-sm font-semibold hover:text-primary transition-colors"
+          >
+            Servicios
+          </button>
           <a href="#trazabilidad" className="text-sm font-semibold hover:text-primary transition-colors">Trazabilidad</a>
-          <a href="#nosotros" className="text-sm font-semibold hover:text-primary transition-colors">Nosotros</a>
           <Button variant="default" className="rounded-full px-6">Acceso Cliente</Button>
         </nav>
 
@@ -233,9 +273,10 @@ export default function App() {
             className="fixed inset-0 z-40 bg-background pt-20 px-6 md:hidden"
           >
             <div className="flex flex-col gap-6 text-lg font-semibold">
-              <a href="#catalogo" onClick={() => setIsMenuOpen(false)}>Catálogo</a>
+              <button className="text-left" onClick={() => { setActiveLine("Forestal"); setIsMenuOpen(false); document.getElementById("catalogo")?.scrollIntoView(); }}>Línea Forestal</button>
+              <button className="text-left" onClick={() => { setActiveLine("Musáceas"); setIsMenuOpen(false); document.getElementById("catalogo")?.scrollIntoView(); }}>Línea Musáceas</button>
+              <button className="text-left" onClick={() => { setIsServicesDialogOpen(true); setIsMenuOpen(false); }}>Servicios</button>
               <a href="#trazabilidad" onClick={() => setIsMenuOpen(false)}>Trazabilidad</a>
-              <a href="#nosotros" onClick={() => setIsMenuOpen(false)}>Nosotros</a>
               <Button className="w-full rounded-xl py-6">Acceso Cliente</Button>
             </div>
           </motion.div>
@@ -282,8 +323,13 @@ export default function App() {
                 >
                   Comprar plantas certificadas
                 </a>
-                <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary/5 rounded-xl px-8 py-7 text-lg">
-                  Solicitar Asesoría
+                <Button 
+                  size="lg" 
+                  variant="outline" 
+                  className="border-primary text-primary hover:bg-primary/5 rounded-xl px-8 py-7 text-lg"
+                  onClick={() => setIsServicesDialogOpen(true)}
+                >
+                  Solicitar Servicios
                 </Button>
               </div>
             </motion.div>
@@ -314,10 +360,84 @@ export default function App() {
 
         {/* Catalog Section */}
         <section id="catalogo" className="py-24 container mx-auto px-6">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-            <div>
-              <h3 className="text-3xl font-bold mb-2">Líneas de Producción</h3>
-              <p className="text-stone-500">Material genético de alta pureza con certificación SENASA.</p>
+          <div className="mb-12">
+            <div className="flex items-center gap-2 text-primary mb-4">
+              <span className="text-sm font-bold uppercase tracking-widest">División Biotecnológica</span>
+              <ChevronRight size={14} />
+              <span className="text-sm font-bold uppercase tracking-widest">{activeLine || "Catálogo General"}</span>
+            </div>
+            
+            {activeLine === "Musáceas" ? (
+              <div className="max-w-4xl">
+                <h3 className="text-5xl font-headline font-bold mb-6">Línea Musáceas: <span className="text-primary italic">Biotecnología Aplicada</span></h3>
+                <p className="text-xl text-stone-600 mb-8 leading-relaxed">
+                  Producción masiva de clones de alta calidad mediante Micropropagación, libre de patógenos críticos y precocidad productiva.
+                </p>
+                <div className="inline-flex items-center gap-3 bg-primary/10 text-primary px-6 py-3 rounded-full text-sm font-bold border border-primary/20">
+                  <CheckCircle2 size={18} />
+                  TODA NUESTRA LÍNEA DE MUSÁCEAS ESTÁ BIOTIZADA CON MICROORGANISMOS NATIVOS
+                </div>
+              </div>
+            ) : activeLine === "Forestal" ? (
+              <div className="max-w-4xl">
+                <h3 className="text-5xl font-headline font-bold mb-6">Línea Forestal: <span className="text-primary italic">Innovación en Propagación Clonal</span></h3>
+                <p className="text-xl text-stone-600 mb-8 leading-relaxed">
+                  Impulsamos la reforestación de alto valor mediante técnicas in vitro avanzadas, garantizando vigor genético y adaptabilidad climática.
+                </p>
+                <div className="flex flex-wrap gap-6">
+                  <div className="flex items-center gap-3 bg-white border border-border p-4 rounded-2xl shadow-sm">
+                    <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                      <ShieldCheck size={20} />
+                    </div>
+                    <div>
+                      <p className="text-lg font-bold">99%</p>
+                      <p className="text-xs text-stone-500 uppercase tracking-tighter">Sanidad Garantizada</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 bg-white border border-border p-4 rounded-2xl shadow-sm">
+                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                      <Leaf size={20} />
+                    </div>
+                    <div>
+                      <p className="text-lg font-bold">Sostenibilidad</p>
+                      <p className="text-xs text-stone-500 uppercase tracking-tighter">Certificada</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-col md:flex-row justify-between items-end gap-6">
+                <div>
+                  <h3 className="text-3xl font-bold mb-2">Líneas de Producción</h3>
+                  <p className="text-stone-500">Material genético de alta pureza con certificación SENASA.</p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-6 bg-muted/30 p-6 rounded-2xl border border-border/50">
+            <div className="flex gap-2">
+              <Button 
+                variant={activeLine === "" ? "default" : "outline"} 
+                onClick={() => setActiveLine("")}
+                className="rounded-full"
+              >
+                Todos
+              </Button>
+              <Button 
+                variant={activeLine === "Musáceas" ? "default" : "outline"} 
+                onClick={() => setActiveLine("Musáceas")}
+                className="rounded-full"
+              >
+                Musáceas
+              </Button>
+              <Button 
+                variant={activeLine === "Forestal" ? "default" : "outline"} 
+                onClick={() => setActiveLine("Forestal")}
+                className="rounded-full"
+              >
+                Forestal
+              </Button>
             </div>
             <div className="flex gap-4">
               <select 
@@ -359,7 +479,15 @@ export default function App() {
                   <Card className="h-full flex flex-col overflow-hidden border-border/50 hover:shadow-xl transition-all">
                     <div className="h-48 bg-muted relative overflow-hidden">
                       <img 
-                        src={`https://picsum.photos/seed/${product.variety}/600/400`} 
+                        src={product.variety === "Curaré Enano" 
+                          ? "https://lh3.googleusercontent.com/aida-public/AB6AXuD9_Vn-p9f9-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y" 
+                          : product.variety === "Palo de Rosa"
+                          ? "https://picsum.photos/seed/rosewood/600/400"
+                          : product.variety === "Cedro"
+                          ? "https://picsum.photos/seed/cedar/600/400"
+                          : product.variety === "Caoba"
+                          ? "https://picsum.photos/seed/mahogany/600/400"
+                          : `https://picsum.photos/seed/${product.variety}/600/400`} 
                         alt={product.variety}
                         className="w-full h-full object-cover"
                         referrerPolicy="no-referrer"
@@ -370,30 +498,45 @@ export default function App() {
                     </div>
                     <CardHeader>
                       <div className="flex justify-between items-start">
-                        <CardTitle className="text-xl">{product.variety}</CardTitle>
+                        <div>
+                          <CardTitle className="text-xl">{product.variety}</CardTitle>
+                          <p className="text-xs text-stone-400 font-mono mt-1">ID: {product.code}</p>
+                        </div>
                         <span className="text-primary font-bold">S/ {product.base_price.toFixed(2)}</span>
                       </div>
                       <CardDescription>{product.species}</CardDescription>
                     </CardHeader>
                     <CardContent className="flex-1">
-                      <div className="space-y-2 text-sm">
-                        <div className="flex items-center gap-2 text-stone-600">
-                          <MapPin size={14} /> {product.region}
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="bg-stone-50 p-3 rounded-xl border border-stone-100">
+                            <p className="text-[10px] uppercase tracking-widest text-stone-400 mb-1">Cosecha / Ciclo</p>
+                            <p className="text-sm font-bold">{product.height}</p>
+                          </div>
+                          <div className="bg-stone-50 p-3 rounded-xl border border-stone-100">
+                            <p className="text-[10px] uppercase tracking-widest text-stone-400 mb-1">Estado / Fusarium</p>
+                            <p className="text-sm font-bold">{product.tolerance}</p>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-2 text-stone-600">
-                          <ShieldCheck size={14} className="text-green-600" /> {product.senasa_cert}
-                        </div>
-                        <div className="flex items-center gap-2 text-stone-600">
-                          <Leaf size={14} className="text-primary" /> Stock: {product.stock_in_vitro} plántulas
+                        <div className="space-y-2 text-sm">
+                          <div className="flex items-center gap-2 text-stone-600">
+                            <MapPin size={14} /> {product.region}
+                          </div>
+                          <div className="flex items-center gap-2 text-stone-600">
+                            <ShieldCheck size={14} className="text-green-600" /> {product.senasa_cert}
+                          </div>
+                          <div className="flex items-center gap-2 text-stone-600">
+                            <Leaf size={14} className="text-primary" /> Stock: {product.stock_in_vitro} plántulas
+                          </div>
                         </div>
                       </div>
                     </CardContent>
-                    <CardFooter>
+                    <CardFooter className="pt-0">
                       <Button 
-                        className="w-full rounded-xl" 
+                        className="w-full rounded-xl bg-primary/10 text-primary hover:bg-primary hover:text-white border-none shadow-none" 
                         onClick={() => setSelectedProduct(product)}
                       >
-                        Reservar Lote
+                        Ver Ficha Técnica <FileText className="ml-2" size={16} />
                       </Button>
                     </CardFooter>
                   </Card>
@@ -579,12 +722,144 @@ export default function App() {
         </DialogContent>
       </Dialog>
 
-      {/* Footer */}
+      {/* Services Dialog */}
+      <Dialog open={isServicesDialogOpen} onOpenChange={setIsServicesDialogOpen}>
+        <DialogContent className="max-w-4xl p-0 overflow-hidden rounded-3xl border-none">
+          <div className="flex flex-col md:flex-row h-full max-h-[90vh]">
+            {/* Sidebar Info */}
+            <div className="w-full md:w-1/3 bg-stone-50 p-8 border-r border-border">
+              <h3 className="text-3xl font-headline font-bold mb-6 leading-tight">Impulsando el futuro <span className="text-primary">agrícola de Perú</span></h3>
+              <p className="text-stone-600 mb-8 text-sm leading-relaxed">
+                Complete este formulario para iniciar su proceso de análisis o consultoría técnica. Nuestro equipo de especialistas revisará su solicitud en un plazo de 24 horas.
+              </p>
+              
+              <div className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-border mb-8">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                  <ShieldCheck size={20} />
+                </div>
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-widest">Certificación ISO</p>
+                  <p className="text-[10px] text-stone-500">Estándares internacionales en cada proceso.</p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <h4 className="text-xs font-bold uppercase tracking-widest text-stone-400 flex items-center gap-2">
+                  <FlaskRound size={14} /> Nuestros Servicios
+                </h4>
+                <div className="space-y-2">
+                  {[
+                    { title: "MICROPROPAGACIÓN", desc: "Propagación clonal y masiva de especies frutales o forestales." },
+                    { title: "DESARROLLO DE TÉCNICAS", desc: "Desarrollo de protocolos de Micropropagación, Embriogénesis, Organogénesis." },
+                    { title: "ASESORÍA TÉCNICA", desc: "Acompañamiento especializado para el establecimiento de cultivos in vitro." }
+                  ].map((s, i) => (
+                    <div key={i} className="p-3 bg-white rounded-xl border border-border hover:border-primary/30 transition-colors">
+                      <p className="text-[10px] font-bold text-primary mb-1">{s.title}</p>
+                      <p className="text-[10px] text-stone-500 leading-tight">{s.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Form */}
+            <div className="flex-1 bg-white p-8 overflow-y-auto">
+              <div className="flex justify-between items-center mb-8">
+                <h4 className="text-xl font-bold flex items-center gap-2">
+                  <ClipboardList className="text-primary" /> Solicitar Servicios
+                </h4>
+                <Button variant="ghost" size="sm" onClick={() => setIsServicesDialogOpen(false)} className="text-stone-400">
+                  Cancel
+                </Button>
+              </div>
+
+              <div className="space-y-8">
+                {/* Contact Info */}
+                <div className="space-y-4">
+                  <h5 className="text-xs font-bold uppercase tracking-widest text-stone-400 flex items-center gap-2">
+                    <User size={14} /> Información de Contacto
+                  </h5>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-xs font-semibold">Nombre Completo</label>
+                      <Input placeholder="Ej. Ricardo Palma" className="rounded-xl h-12" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-semibold">Correo Electrónico</label>
+                      <Input placeholder="ricardo@empresa.pe" className="rounded-xl h-12" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-semibold">Número de Teléfono</label>
+                      <Input placeholder="+51 900 000 000" className="rounded-xl h-12" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-semibold">Organización / Empresa</label>
+                      <Input placeholder="Nombre de su organización" className="rounded-xl h-12" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Service Type & Urgency */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <h5 className="text-xs font-bold uppercase tracking-widest text-stone-400 flex items-center gap-2">
+                      <Microscope size={14} /> Tipo de Servicio
+                    </h5>
+                    <select className="w-full h-12 rounded-xl border border-border px-4 bg-stone-50 text-sm">
+                      <option>Seleccione un servicio</option>
+                      <option>Micropropagación</option>
+                      <option>Desarrollo de Técnicas</option>
+                      <option>Asesoría Técnica</option>
+                    </select>
+                  </div>
+                  <div className="space-y-4">
+                    <h5 className="text-xs font-bold uppercase tracking-widest text-stone-400 flex items-center gap-2">
+                      <Clock size={14} /> Urgencia del Proyecto
+                    </h5>
+                    <select className="w-full h-12 rounded-xl border border-border px-4 bg-stone-50 text-sm">
+                      <option>Nivel de prioridad</option>
+                      <option>Baja</option>
+                      <option>Media</option>
+                      <option>Alta / Inmediata</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Details */}
+                <div className="space-y-4">
+                  <h5 className="text-xs font-bold uppercase tracking-widest text-stone-400 flex items-center gap-2">
+                    <FileText size={14} /> Detalles del Proyecto
+                  </h5>
+                  <div className="space-y-2">
+                    <label className="text-xs font-semibold">Describa sus necesidades específicas</label>
+                    <textarea 
+                      className="w-full min-h-[120px] rounded-2xl border border-border p-4 bg-stone-50 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
+                      placeholder="Por favor, incluya detalles sobre los cultivos, el área de estudio o los objetivos específicos de su solicitud..."
+                    ></textarea>
+                  </div>
+                </div>
+
+                <div className="flex justify-end gap-4 pt-4">
+                  <Button variant="outline" className="rounded-xl h-12 px-8">Guardar Borrador</Button>
+                  <Button className="rounded-xl h-12 px-8 bg-primary hover:bg-primary/90" onClick={() => setIsServicesDialogOpen(false)}>Enviar Solicitud</Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
       <footer className="bg-stone-900 text-white py-20">
         <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
           <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center gap-3 mb-6">
-              <Sprout size={32} className="text-primary" />
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-16 h-16 rounded-lg bg-white p-1 overflow-hidden">
+                <img 
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKq1od6ZBRIwZuSMupZloRtyQgO7jrPgFokmtF-9jdSHK5DNep6VAPua2jPOMUn1UbnFHcFiz2Jg94_CC0zWp1GtWC6nF8I7K4rGMNA6J17O8o1WAka2CNr8c1AMF2BXHjzGu6MtxZICY-n2Ji9srsfpYavDHZZUn_EsMRymLk8D4wI_UIP1YUrBjUu8Xsi_LGSlOabrvDdytzHCkHZ7X7T4z_C5DozFO3Biv0AjIPKBJLNb1LBh9D8ElHLClRgmu5-C9ONILlaQ" 
+                  alt="Laboratorios Perú Mundo Logo" 
+                  className="w-full h-full object-contain"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
               <h4 className="text-2xl font-headline font-bold">Laboratorios Perú Mundo</h4>
             </div>
             <p className="text-stone-400 max-w-md leading-relaxed">
