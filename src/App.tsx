@@ -102,13 +102,43 @@ export default function App() {
         className="fixed inset-0 z-[100] bg-stone-900 flex items-center justify-center overflow-hidden"
       >
         <div className="absolute inset-0 z-0">
-          <img 
-            src="https://picsum.photos/seed/amazon-biotech/1920/1080?blur=2" 
-            alt="Amazon Biotech Cover" 
-            className="w-full h-full object-cover opacity-60 scale-105"
-            referrerPolicy="no-referrer"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-stone-900/40 to-stone-900"></div>
+          <motion.div
+            animate={{ 
+              scale: [1, 1.05, 1],
+              rotate: [0, 1, 0]
+            }}
+            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+            className="absolute inset-0"
+          >
+            <img 
+              src="https://picsum.photos/seed/amazon-biotech-vibe/1920/1080?blur=2" 
+              alt="Amazon Biotech Cover" 
+              className="w-full h-full object-cover opacity-40 scale-110"
+              referrerPolicy="no-referrer"
+            />
+          </motion.div>
+          <div className="absolute inset-0 bg-gradient-to-b from-stone-900/10 via-stone-900/60 to-stone-900"></div>
+          
+          {/* Animated floating particles */}
+          {[...Array(6)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-64 h-64 rounded-full bg-primary/10 blur-[100px]"
+              animate={{
+                x: [Math.random() * 100, Math.random() * -100, Math.random() * 100],
+                y: [Math.random() * 100, Math.random() * -100, Math.random() * 100],
+              }}
+              transition={{
+                duration: 10 + i * 5,
+                repeat: Infinity,
+                ease: "linear"
+              }}
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+              }}
+            />
+          ))}
         </div>
 
         <div className="relative z-10 container mx-auto px-6 text-center">
@@ -287,8 +317,11 @@ export default function App() {
         {/* Hero Section */}
         <section className="relative h-[80vh] min-h-[600px] flex items-center overflow-hidden">
           <div className="absolute inset-0 z-0">
-            <img 
-              src="https://picsum.photos/seed/amazon-rainforest/1920/1080" 
+            <motion.img 
+              initial={{ scale: 1.1 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 1.5 }}
+              src="https://picsum.photos/seed/amazon-rainforest-vibrant/1920/1080" 
               alt="Amazon Rainforest" 
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
@@ -359,63 +392,163 @@ export default function App() {
         </section>
 
         {/* Catalog Section */}
-        <section id="catalogo" className="py-24 container mx-auto px-6">
-          <div className="mb-12">
-            <div className="flex items-center gap-2 text-primary mb-4">
-              <span className="text-sm font-bold uppercase tracking-widest">División Biotecnológica</span>
-              <ChevronRight size={14} />
-              <span className="text-sm font-bold uppercase tracking-widest">{activeLine || "Catálogo General"}</span>
-            </div>
-            
-            {activeLine === "Musáceas" ? (
-              <div className="max-w-4xl">
-                <h3 className="text-5xl font-headline font-bold mb-6">Línea Musáceas: <span className="text-primary italic">Biotecnología Aplicada</span></h3>
-                <p className="text-xl text-stone-600 mb-8 leading-relaxed">
-                  Producción masiva de clones de alta calidad mediante Micropropagación, libre de patógenos críticos y precocidad productiva.
-                </p>
-                <div className="inline-flex items-center gap-3 bg-primary/10 text-primary px-6 py-3 rounded-full text-sm font-bold border border-primary/20">
-                  <CheckCircle2 size={18} />
-                  TODA NUESTRA LÍNEA DE MUSÁCEAS ESTÁ BIOTIZADA CON MICROORGANISMOS NATIVOS
-                </div>
+        <section id="catalogo" className="py-24 bg-[#FCFAF5]">
+          <div className="container mx-auto px-6">
+            <div className="mb-12">
+              <div className="flex items-center gap-2 text-primary mb-4">
+                <span className="text-sm font-bold uppercase tracking-widest">División Biotecnológica</span>
+                <ChevronRight size={14} />
+                <span className="text-sm font-bold uppercase tracking-widest">{activeLine || "Líneas de Producción"}</span>
               </div>
-            ) : activeLine === "Forestal" ? (
-              <div className="max-w-4xl">
-                <h3 className="text-5xl font-headline font-bold mb-6">Línea Forestal: <span className="text-primary italic">Innovación en Propagación Clonal</span></h3>
-                <p className="text-xl text-stone-600 mb-8 leading-relaxed">
-                  Impulsamos la reforestación de alto valor mediante técnicas in vitro avanzadas, garantizando vigor genético y adaptabilidad climática.
-                </p>
-                <div className="flex flex-wrap gap-6">
-                  <div className="flex items-center gap-3 bg-white border border-border p-4 rounded-2xl shadow-sm">
-                    <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600">
-                      <ShieldCheck size={20} />
-                    </div>
-                    <div>
-                      <p className="text-lg font-bold">99%</p>
-                      <p className="text-xs text-stone-500 uppercase tracking-tighter">Sanidad Garantizada</p>
+              
+              {!activeLine && (
+                <div className="mb-20">
+                  <div className="relative rounded-[3rem] overflow-hidden mb-16 h-[400px] flex items-center">
+                    <img 
+                      src="https://picsum.photos/seed/amazon-lab-greenhouse/1920/1080" 
+                      alt="Greenhouse" 
+                      className="absolute inset-0 w-full h-full object-cover"
+                      referrerPolicy="no-referrer"
+                    />
+                    <div className="absolute inset-0 bg-stone-900/50"></div>
+                    <div className="relative z-10 px-12 max-w-2xl">
+                      <Badge className="mb-4 bg-primary/20 backdrop-blur-md text-white border-white/20 px-3 py-1">PROPAGACIÓN IN VITRO</Badge>
+                      <h3 className="text-5xl md:text-6xl font-headline font-bold text-white mb-6 leading-tight">Nuestras Líneas de <br />Producción</h3>
+                      <p className="text-lg text-stone-200 font-light leading-relaxed">
+                        Innovación biotecnológica desde el corazón de la Amazonía para una agricultura de alto rendimiento y sostenibilidad ambiental.
+                      </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3 bg-white border border-border p-4 rounded-2xl shadow-sm">
-                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
-                      <Leaf size={20} />
-                    </div>
-                    <div>
-                      <p className="text-lg font-bold">Sostenibilidad</p>
-                      <p className="text-xs text-stone-500 uppercase tracking-tighter">Certificada</p>
-                    </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    {/* Línea Musáceas Entrance Card */}
+                    <motion.div 
+                      whileHover={{ y: -10 }}
+                      onClick={() => setActiveLine("Musáceas")}
+                      className="group cursor-pointer rounded-[2rem] overflow-hidden bg-white shadow-xl shadow-stone-200/50 border border-stone-100 flex flex-col"
+                    >
+                      <div className="h-72 relative overflow-hidden">
+                        <img 
+                          src="https://picsum.photos/seed/musacea-plant-vibrant/800/600" 
+                          alt="Línea Musáceas" 
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          referrerPolicy="no-referrer"
+                        />
+                        <div className="absolute top-6 left-6 flex gap-2">
+                          <Badge className="bg-[#4a7c59] text-white border-none text-[10px] py-0.5">BIOTIZADO</Badge>
+                          <Badge className="bg-[#8b7355] text-white border-none text-[10px] py-0.5">ALTO RENDIMIENTO</Badge>
+                        </div>
+                      </div>
+                      <div className="p-10 flex-1 flex flex-col">
+                        <h4 className="text-3xl font-headline font-bold mb-4 text-[#2d4a22]">Línea Musáceas</h4>
+                        <p className="text-stone-500 mb-8 font-light leading-relaxed flex-1">
+                          Utilizamos técnicas avanzadas de micropropagación para garantizar plantas libres de patógenos, con un desarrollo radicular superior y adaptabilidad inmediata al campo.
+                        </p>
+                        <div className="flex items-center justify-between pt-6 border-t border-stone-50">
+                          <div className="flex gap-4">
+                            <span className="flex items-center gap-1.5 text-xs font-bold text-primary"><CheckCircle2 size={12}/> Banano</span>
+                            <span className="flex items-center gap-1.5 text-xs font-bold text-primary"><CheckCircle2 size={12}/> Plátano</span>
+                          </div>
+                          <span className="text-primary font-bold flex items-center gap-2 text-sm group-hover:translate-x-1 transition-transform">
+                            Saber más <ChevronRight size={16}/>
+                          </span>
+                        </div>
+                      </div>
+                    </motion.div>
+
+                    {/* Línea Forestal Entrance Card */}
+                    <motion.div 
+                      whileHover={{ y: -10 }}
+                      onClick={() => setActiveLine("Forestal")}
+                      className="group cursor-pointer rounded-[2rem] overflow-hidden bg-white shadow-xl shadow-stone-200/50 border border-stone-100 flex flex-col"
+                    >
+                      <div className="h-72 relative overflow-hidden bg-[#fafafa] flex items-center justify-center">
+                        <img 
+                          src="https://picsum.photos/seed/amazon-big-tree/800/800" 
+                          alt="Línea Forestal" 
+                          className="w-4/5 h-4/5 object-contain transition-transform duration-700 group-hover:scale-105"
+                          referrerPolicy="no-referrer"
+                        />
+                        <div className="absolute top-6 left-6 flex gap-2">
+                          <Badge className="bg-[#2e5e4e] text-white border-none text-[10px] py-0.5">99% SANIDAD</Badge>
+                          <Badge className="bg-[#6b6358] text-white border-none text-[10px] py-0.5">SOSTENIBILIDAD</Badge>
+                        </div>
+                      </div>
+                      <div className="p-10 flex-1 flex flex-col">
+                        <h4 className="text-3xl font-headline font-bold mb-4 text-[#2d4a22]">Línea Forestal</h4>
+                        <p className="text-stone-500 mb-8 font-light leading-relaxed flex-1">
+                          Especialistas en la recuperación de especies amazónicas de alto valor comercial. Nuestra clonación garantiza la preservación de genéticas superiores para reforestación estratégica.
+                        </p>
+                        <div className="flex items-center justify-between pt-6 border-t border-stone-50">
+                          <div className="flex gap-4">
+                            <span className="flex items-center gap-1.5 text-xs font-bold text-primary"><CheckCircle2 size={12}/> Palo de Rosa</span>
+                            <span className="flex items-center gap-1.5 text-xs font-bold text-primary"><CheckCircle2 size={12}/> Caoba</span>
+                            <span className="flex items-center gap-1.5 text-xs font-bold text-primary"><CheckCircle2 size={12}/> Cedro</span>
+                          </div>
+                          <span className="text-primary font-bold flex items-center gap-2 text-sm group-hover:translate-x-1 transition-transform">
+                            Saber más <ChevronRight size={16}/>
+                          </span>
+                        </div>
+                      </div>
+                    </motion.div>
                   </div>
                 </div>
-              </div>
-            ) : (
-              <div className="flex flex-col md:flex-row justify-between items-end gap-6">
-                <div>
-                  <h3 className="text-3xl font-bold mb-2">Líneas de Producción</h3>
-                  <p className="text-stone-500">Material genético de alta pureza con certificación SENASA.</p>
-                </div>
-              </div>
-            )}
+              )}
+              
+              {activeLine === "Musáceas" && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="max-w-4xl p-10 bg-[#eef5ed] rounded-[2.5rem] border border-[#dce9db] mb-16 shadow-sm"
+                >
+                  <h3 className="text-4xl md:text-5xl font-headline font-bold mb-6 text-[#2d4a22]">Línea Musáceas: <span className="text-primary italic">Biotecnología Aplicada</span></h3>
+                  <p className="text-lg text-stone-600 mb-8 leading-relaxed font-light">
+                    Producción masiva de clones de alta calidad mediante Micropropagación, libre de patógenos críticos y precocidad productiva.
+                  </p>
+                  <div className="inline-flex items-center gap-3 bg-[#4a7c59]/10 text-[#4a7c59] px-6 py-3 rounded-full text-sm font-bold border border-[#4a7c59]/20">
+                    <CheckCircle2 size={18} />
+                    TODA NUESTRA LÍNEA DE MUSÁCEAS ESTÁ BIOTIZADA CON MICROORGANISMOS NATIVOS
+                  </div>
+                </motion.div>
+              )}
+              
+              {activeLine === "Forestal" && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="max-w-4xl p-10 bg-[#f0f2f1] rounded-[2.5rem] border border-[#e2e6e4] mb-16 shadow-sm"
+                >
+                  <h3 className="text-4xl md:text-5xl font-headline font-bold mb-6 text-[#1b3022]">Línea Forestal: <span className="text-primary italic">Propagación Clonal Élite</span></h3>
+                  <p className="text-lg text-stone-600 mb-8 leading-relaxed font-light">
+                    Impulsamos la reforestación de alto valor mediante técnicas in vitro avanzadas, garantizando vigor genético y adaptabilidad climática superior.
+                  </p>
+                  <div className="flex flex-wrap gap-6">
+                    <div className="flex items-center gap-3 bg-white border border-stone-200 p-4 rounded-2xl shadow-sm">
+                      <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                        <ShieldCheck size={20} />
+                      </div>
+                      <div>
+                        <p className="text-lg font-bold">99%</p>
+                        <p className="text-xs text-stone-500 uppercase tracking-tighter text-[10px]">Sanidad Garantizada</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3 bg-white border border-stone-200 p-4 rounded-2xl shadow-sm">
+                      <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                        <Leaf size={20} />
+                      </div>
+                      <div>
+                        <p className="text-lg font-bold">Sostenibilidad</p>
+                        <p className="text-xs text-stone-500 uppercase tracking-tighter text-[10px]">Certificada</p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
           </div>
 
-          <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-6 bg-muted/30 p-6 rounded-2xl border border-border/50">
+          {(activeLine || regionFilter || growthFilter) && (
+            <>
+              <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-6 bg-muted/30 p-6 rounded-2xl border border-border/50">
             <div className="flex gap-2">
               <Button 
                 variant={activeLine === "" ? "default" : "outline"} 
@@ -481,12 +614,14 @@ export default function App() {
                       <img 
                         src={product.variety === "Curaré Enano" 
                           ? "https://lh3.googleusercontent.com/aida-public/AB6AXuD9_Vn-p9f9-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y" 
-                          : product.variety === "Palo de Rosa"
-                          ? "https://picsum.photos/seed/rosewood/600/400"
+                          : product.variety === "Isla Maleño"
+                          ? "https://picsum.photos/seed/islamaleno/600/400"
+                          : product.variety === "Aniba rosaeodora"
+                          ? "https://picsum.photos/seed/aniba/600/400"
                           : product.variety === "Cedro"
-                          ? "https://picsum.photos/seed/cedar/600/400"
+                          ? "https://picsum.photos/seed/cedar-timber/600/400"
                           : product.variety === "Caoba"
-                          ? "https://picsum.photos/seed/mahogany/600/400"
+                          ? "https://picsum.photos/seed/mahogany-premium/600/400"
                           : `https://picsum.photos/seed/${product.variety}/600/400`} 
                         alt={product.variety}
                         className="w-full h-full object-cover"
@@ -544,7 +679,10 @@ export default function App() {
               ))}
             </div>
           )}
-        </section>
+        </>
+      )}
+    </div>
+  </section>
 
         {/* Traceability Section */}
         <section id="trazabilidad" className="py-24 bg-muted/50">

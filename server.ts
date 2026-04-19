@@ -67,11 +67,11 @@ if (productCount.count === 0) {
 
   // Musáceas
   insertProduct.run("Musa AAB", "Curaré Enano", "Biotizado +30%", "SENASA-2024-001", 5000, "Rápido", 3.53, "Loreto", "Musáceas", "PH-MUS-01", "9-10 m", "Tolerante");
-  insertProduct.run("Musa AAB 'Plantain'", "Red Banano Enano", "Biotizado", "SENASA-2024-005", 3000, "Moderado", 3.80, "Loreto", "Musáceas", "PH-MUS-02", "11 m", "Libre de Virus");
-  insertProduct.run("Musa AAA 'Cavendish'", "Isla Maleño", "Biotizado", "SENASA-2024-006", 4000, "Moderado", 3.60, "San Martín", "Musáceas", "PH-MUS-03", "8-9 m", "Vigilado");
+  insertProduct.run("Musa AAB 'Red Banano Enano'", "Red Banano Enano", "Biotizado", "SENASA-2024-005", 3000, "Moderado", 3.80, "Loreto", "Musáceas", "PH-MUS-02", "11 m", "Libre de Virus");
+  insertProduct.run("Musa AAA 'Isla Maleño'", "Isla Maleño", "Biotizado", "SENASA-2024-006", 4000, "Moderado", 3.60, "San Martín", "Musáceas", "PH-MUS-03", "8-9 m", "Vigilado");
 
   // Forestal
-  insertProduct.run("Aniba rosaeodora", "Palo de Rosa", "Biotizado Clonal", "SENASA-2024-002", 2000, "Moderado", 6.10, "San Martín", "Forestal", "PH-FOR-01", "12 meses (ciclo)", "Disponible");
+  insertProduct.run("Aniba rosaeodora", "Palo Rosa", "Biotizado Clonal", "SENASA-2024-002", 2000, "Moderado", 6.10, "San Martín", "Forestal", "PH-FOR-01", "12 meses (ciclo)", "Disponible");
   insertProduct.run("Cedrela odorata", "Cedro", "Biotizado", "SENASA-2024-003", 1500, "Lento", 5.50, "Loreto", "Forestal", "PH-FOR-02", "10 meses (ciclo)", "Bajo Pedido");
   insertProduct.run("Swietenia macrophylla", "Caoba", "Biotizado", "SENASA-2024-004", 1200, "Lento", 6.50, "San Martín", "Forestal", "PH-FOR-03", "14 meses (ciclo)", "Disponible");
 }
