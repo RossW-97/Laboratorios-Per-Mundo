@@ -13,6 +13,7 @@ export interface Product {
   code: string;
   height: string;
   tolerance: string;
+  technical_details?: string;
 }
 
 export interface TraceabilityLog {

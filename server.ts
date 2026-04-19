@@ -30,7 +30,8 @@ db.exec(`
     line TEXT,
     code TEXT,
     height TEXT,
-    tolerance TEXT
+    tolerance TEXT,
+    technical_details TEXT
   );
 
   CREATE TABLE IF NOT EXISTS orders (
@@ -61,19 +62,37 @@ db.exec(`
 const productCount = db.prepare("SELECT COUNT(*) as count FROM products").get() as { count: number };
 if (productCount.count === 0) {
   const insertProduct = db.prepare(`
-    INSERT INTO products (species, variety, biotization_type, senasa_cert, stock_in_vitro, growth_speed, base_price, region, line, code, height, tolerance)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO products (species, variety, biotization_type, senasa_cert, stock_in_vitro, growth_speed, base_price, region, line, code, height, tolerance, technical_details)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
 
   // Musáceas
-  insertProduct.run("Musa AAB", "Curaré Enano", "Biotizado +30%", "SENASA-2024-001", 5000, "Rápido", 3.53, "Loreto", "Musáceas", "PH-MUS-01", "9-10 m", "Tolerante");
-  insertProduct.run("Musa AAB 'Red Banano Enano'", "Red Banano Enano", "Biotizado", "SENASA-2024-005", 3000, "Moderado", 3.80, "Loreto", "Musáceas", "PH-MUS-02", "11 m", "Libre de Virus");
-  insertProduct.run("Musa AAA 'Isla Maleño'", "Isla Maleño", "Biotizado", "SENASA-2024-006", 4000, "Moderado", 3.60, "San Martín", "Musáceas", "PH-MUS-03", "8-9 m", "Vigilado");
+  insertProduct.run(
+    "Musa AAB", "Curaré Enano", "Biotizado +30%", "SENASA-2024-001", 5000, "Rápido", 3.53, "Loreto", "Musáceas", "PH-MUS-01", "2.1-2.9 m", "Tolerante",
+    "Taxonomía: Eumusa AAB Plátano. Hábito de hoja: Encorvada. Aspecto del seudo tallo: Robusto. Ciclo: 294 días. Producción: 15-20 kg/racimo. Fruto: Curvado hacia arriba (45°), 21-31 cm."
+  );
+  insertProduct.run(
+    "Musa AAA cv. Figue Rose Naine", "Red Banano Enano", "Biotizado", "SENASA-2024-005", 3000, "Moderado", 3.80, "Loreto", "Musáceas", "PH-MUS-02", "3-4 m", "Libre de Virus",
+    "Taxonomía: Musa AAA cv. Figue Rose Naine. Clon popular conocido como Plátano Rojo Enano Cubano. Planta robusta y resistente, sensible al frío (< 8°C). Reproducción in vitro garantizada."
+  );
+  insertProduct.run(
+    "Musa paradisiaca L.", "Isla Maleño", "Biotizado", "SENASA-2024-006", 4000, "Moderado", 3.60, "San Martín", "Musáceas", "PH-MUS-03", "2.79 m", "Vigilado",
+    "Taxonomía: Musa paradisiaca L. Producción: 95 bananos/planta (~20 Tn/ha). Seudo tallo: Verde rosado, 70 cm diámetro. Plantas precoces diseñadas para acortar fases fenológicas."
+  );
 
   // Forestal
-  insertProduct.run("Aniba rosaeodora", "Palo Rosa", "Biotizado Clonal", "SENASA-2024-002", 2000, "Moderado", 6.10, "San Martín", "Forestal", "PH-FOR-01", "12 meses (ciclo)", "Disponible");
-  insertProduct.run("Cedrela odorata", "Cedro", "Biotizado", "SENASA-2024-003", 1500, "Lento", 5.50, "Loreto", "Forestal", "PH-FOR-02", "10 meses (ciclo)", "Bajo Pedido");
-  insertProduct.run("Swietenia macrophylla", "Caoba", "Biotizado", "SENASA-2024-004", 1200, "Lento", 6.50, "San Martín", "Forestal", "PH-FOR-03", "14 meses (ciclo)", "Disponible");
+  insertProduct.run(
+    "Aniba rosaeodora", "Palo Rosa", "Biotizado Clonal", "SENASA-2024-002", 2000, "Moderado", 6.10, "San Martín", "Forestal", "PH-FOR-01", "18-35 m", "Disponible",
+    "Taxonomía: Aniba rosaeodora Ducke. Árbol de porte mediano a grande. Corteza: Marrón claro (externa), Rosado claro y fragante (interna). Frutos: Drupas verdes globosas de 3.5 cm."
+  );
+  insertProduct.run(
+    "Cedrela odorata", "Cedro", "Biotizado", "SENASA-2024-003", 1500, "Lento", 5.50, "Loreto", "Forestal", "PH-FOR-02", "40 m", "Bajo Pedido",
+    "Taxonomía: Cedrela odorata L. Árbol de tronco recto. Copa: Grande, globosa y alargada. Corteza: Gruesa, áspera y acanalada de color café oscuro o gris. Fruto: Cápsula leñosa pentavalvar."
+  );
+  insertProduct.run(
+    "Swietenia macrophylla", "Caoba", "Biotizado", "SENASA-2024-004", 1200, "Lento", 6.50, "San Martín", "Forestal", "PH-FOR-03", "30-60 m", "Disponible",
+    "Taxonomía: Swietenia macrophylla L. Árbol de gran tamaño. Copa: Diámetro de 14m con ramitas color castaño. Fuste: Recto, libre de ramas. Semillas: Sámaras aladas de 7.5 a 10 cm."
+  );
 }
 
 async function startServer() {

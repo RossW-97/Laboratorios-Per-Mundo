@@ -499,15 +499,38 @@ export default function App() {
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="max-w-4xl p-10 bg-[#eef5ed] rounded-[2.5rem] border border-[#dce9db] mb-16 shadow-sm"
+                  className="mb-16"
                 >
-                  <h3 className="text-4xl md:text-5xl font-headline font-bold mb-6 text-[#2d4a22]">Línea Musáceas: <span className="text-primary italic">Biotecnología Aplicada</span></h3>
-                  <p className="text-lg text-stone-600 mb-8 leading-relaxed font-light">
-                    Producción masiva de clones de alta calidad mediante Micropropagación, libre de patógenos críticos y precocidad productiva.
-                  </p>
-                  <div className="inline-flex items-center gap-3 bg-[#4a7c59]/10 text-[#4a7c59] px-6 py-3 rounded-full text-sm font-bold border border-[#4a7c59]/20">
-                    <CheckCircle2 size={18} />
-                    TODA NUESTRA LÍNEA DE MUSÁCEAS ESTÁ BIOTIZADA CON MICROORGANISMOS NATIVOS
+                  <Button 
+                    variant="ghost" 
+                    onClick={() => setActiveLine("")}
+                    className="mb-8 pl-0 text-stone-400 hover:text-primary transition-colors flex items-center gap-2 group"
+                  >
+                    <ArrowRight className="rotate-180 group-hover:-translate-x-1 transition-transform" size={16}/> 
+                    Volver a Líneas de Producción
+                  </Button>
+                  
+                  <div className="relative rounded-[2.5rem] overflow-hidden bg-[#eef5ed] border border-[#dce9db] shadow-sm flex flex-col md:flex-row">
+                    <div className="w-full md:w-1/2 p-10 md:p-14 relative z-10">
+                      <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-32 -mt-32"></div>
+                      <Badge className="mb-4 bg-[#4a7c59] text-white border-none py-1">LÍNEA DE ÉLITE</Badge>
+                      <h3 className="text-5xl md:text-6xl font-headline font-bold mb-6 text-[#2d4a22]">Línea Musáceas</h3>
+                      <p className="text-xl text-stone-600 mb-8 leading-relaxed font-light">
+                        Producción masiva de clones de alta calidad mediante <span className="font-semibold text-primary">Micropropagación</span>, libre de patógenos críticos y precocidad productiva garantizada.
+                      </p>
+                      <div className="inline-flex items-center gap-3 bg-[#4a7c59]/10 text-[#4a7c59] px-6 py-3 rounded-full text-sm font-bold border border-[#4a7c59]/20">
+                        <CheckCircle2 size={18} />
+                        BIOTIZADA CON MICROORGANISMOS NATIVOS
+                      </div>
+                    </div>
+                    <div className="w-full md:w-1/2 min-h-[300px] relative">
+                      <img 
+                        src="https://picsum.photos/seed/musacea-overview/800/800" 
+                        alt="Musáceas Overview" 
+                        className="absolute inset-0 w-full h-full object-cover"
+                        referrerPolicy="no-referrer"
+                      />
+                    </div>
                   </div>
                 </motion.div>
               )}
@@ -516,30 +539,43 @@ export default function App() {
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="max-w-4xl p-10 bg-[#f0f2f1] rounded-[2.5rem] border border-[#e2e6e4] mb-16 shadow-sm"
+                  className="mb-16"
                 >
-                  <h3 className="text-4xl md:text-5xl font-headline font-bold mb-6 text-[#1b3022]">Línea Forestal: <span className="text-primary italic">Propagación Clonal Élite</span></h3>
-                  <p className="text-lg text-stone-600 mb-8 leading-relaxed font-light">
-                    Impulsamos la reforestación de alto valor mediante técnicas in vitro avanzadas, garantizando vigor genético y adaptabilidad climática superior.
-                  </p>
-                  <div className="flex flex-wrap gap-6">
-                    <div className="flex items-center gap-3 bg-white border border-stone-200 p-4 rounded-2xl shadow-sm">
-                      <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600">
-                        <ShieldCheck size={20} />
-                      </div>
-                      <div>
-                        <p className="text-lg font-bold">99%</p>
-                        <p className="text-xs text-stone-500 uppercase tracking-tighter text-[10px]">Sanidad Garantizada</p>
+                  <Button 
+                    variant="ghost" 
+                    onClick={() => setActiveLine("")}
+                    className="mb-8 pl-0 text-stone-400 hover:text-primary transition-colors flex items-center gap-2 group"
+                  >
+                    <ArrowRight className="rotate-180 group-hover:-translate-x-1 transition-transform" size={16}/> 
+                    Volver a Líneas de Producción
+                  </Button>
+
+                  <div className="relative rounded-[2.5rem] overflow-hidden bg-[#f0f2f1] border border-[#e2e6e4] shadow-sm flex flex-col md:flex-row">
+                    <div className="w-full md:w-1/2 p-10 md:p-14 relative z-10">
+                      <div className="absolute top-0 right-0 w-64 h-64 bg-green-900/5 rounded-full blur-3xl -mr-32 -mt-32"></div>
+                      <Badge className="mb-4 bg-[#1b3022] text-white border-none py-1">REFORESTACIÓN ESTRATÉGICA</Badge>
+                      <h3 className="text-5xl md:text-6xl font-headline font-bold mb-6 text-[#1b3022]">Línea Forestal</h3>
+                      <p className="text-xl text-stone-600 mb-8 leading-relaxed font-light">
+                        Impulsamos la reforestación de alto valor mediante técnicas <span className="font-semibold text-primary">in vitro avanzadas</span>, garantizando vigor genético y adaptabilidad climática superior.
+                      </p>
+                      <div className="flex flex-wrap gap-4">
+                        <div className="flex items-center gap-3 bg-white border border-stone-200 p-3 rounded-xl shadow-sm">
+                          <ShieldCheck size={18} className="text-green-600"/>
+                          <span className="text-xs font-bold uppercase tracking-tighter">99% Sanidad</span>
+                        </div>
+                        <div className="flex items-center gap-3 bg-white border border-stone-200 p-3 rounded-xl shadow-sm">
+                          <Leaf size={18} className="text-blue-600"/>
+                          <span className="text-xs font-bold uppercase tracking-tighter">Sostenibilidad</span>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3 bg-white border border-stone-200 p-4 rounded-2xl shadow-sm">
-                      <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
-                        <Leaf size={20} />
-                      </div>
-                      <div>
-                        <p className="text-lg font-bold">Sostenibilidad</p>
-                        <p className="text-xs text-stone-500 uppercase tracking-tighter text-[10px]">Certificada</p>
-                      </div>
+                    <div className="w-full md:w-1/2 min-h-[300px] relative">
+                      <img 
+                        src="https://picsum.photos/seed/forest-overview/800/800" 
+                        alt="Forestal Overview" 
+                        className="absolute inset-0 w-full h-full object-cover"
+                        referrerPolicy="no-referrer"
+                      />
                     </div>
                   </div>
                 </motion.div>
@@ -614,9 +650,11 @@ export default function App() {
                       <img 
                         src={product.variety === "Curaré Enano" 
                           ? "https://lh3.googleusercontent.com/aida-public/AB6AXuD9_Vn-p9f9-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y" 
+                          : product.variety === "Red Banano Enano"
+                          ? "https://picsum.photos/seed/redbanana/600/400"
                           : product.variety === "Isla Maleño"
                           ? "https://picsum.photos/seed/islamaleno/600/400"
-                          : product.variety === "Aniba rosaeodora"
+                          : product.variety === "Palo Rosa"
                           ? "https://picsum.photos/seed/aniba/600/400"
                           : product.variety === "Cedro"
                           ? "https://picsum.photos/seed/cedar-timber/600/400"
@@ -760,61 +798,141 @@ export default function App() {
         </section>
       </main>
 
-      {/* Order Dialog */}
-      <Dialog open={!!selectedProduct} onOpenChange={() => setSelectedProduct(null)}>
-        <DialogContent className="max-w-md rounded-2xl">
-          <DialogHeader>
-            <DialogTitle>Reserva de Plantas Certificadas</DialogTitle>
-            <DialogDescription>
-              Estás reservando un lote de <span className="font-bold text-stone-900">{selectedProduct?.variety}</span>.
-            </DialogDescription>
-          </DialogHeader>
-          
-          <div className="space-y-6 py-4">
-            <div className="space-y-2">
-              <label className="text-sm font-semibold">Tipo de Cliente</label>
-              <Tabs value={userRole} onValueChange={(v: any) => setUserRole(v)}>
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="agricultor">Agricultor</TabsTrigger>
-                  <TabsTrigger value="cooperativa">Cooperativa</TabsTrigger>
-                </TabsList>
-              </Tabs>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-semibold">Cantidad de Plántulas</label>
-              <Input 
-                type="number" 
-                value={orderQuantity} 
-                onChange={(e) => setOrderQuantity(Number(e.target.value))}
-                min={100}
+      {/* Order / Technical Sheet Dialog */}
+      <Dialog open={!!selectedProduct} onOpenChange={() => { setSelectedProduct(null); setOrderResult(null); }}>
+        <DialogContent className="max-w-5xl p-0 overflow-hidden rounded-[2.5rem] border-none shadow-2xl">
+          <div className="flex flex-col md:flex-row h-full lg:max-h-[90vh]">
+            {/* Image Column (Reposicionada) */}
+            <div className="w-full md:w-1/2 relative bg-stone-100 min-h-[300px] md:min-h-full">
+              <img 
+                src={selectedProduct?.variety === "Curaré Enano" 
+                  ? "https://lh3.googleusercontent.com/aida-public/AB6AXuD9_Vn-p9f9-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y" 
+                  : selectedProduct?.variety === "Red Banano Enano"
+                  ? "https://picsum.photos/seed/redbanana/1000/1000"
+                  : selectedProduct?.variety === "Isla Maleño"
+                  ? "https://picsum.photos/seed/islamaleno/1000/1000"
+                  : `https://picsum.photos/seed/${selectedProduct?.variety}/1000/1000`} 
+                alt={selectedProduct?.variety}
+                className="absolute inset-0 w-full h-full object-cover"
+                referrerPolicy="no-referrer"
               />
-              <p className="text-[10px] text-stone-400 italic">
-                * Cooperativas: 15% de descuento por volumen (+1,000 unidades).
-              </p>
-            </div>
-
-            <div className="bg-muted p-4 rounded-xl space-y-2">
-              <div className="flex justify-between text-sm">
-                <span>Precio Unitario</span>
-                <span>S/ {selectedProduct?.base_price.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between font-bold text-lg border-t border-border pt-2">
-                <span>Total Estimado</span>
-                <span className="text-primary">S/ {calculatePreviewPrice().toFixed(2)}</span>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-stone-900/10"></div>
+              <div className="absolute bottom-8 left-8 text-white">
+                <Badge className="mb-2 bg-primary/20 backdrop-blur-md border-white/20 text-white px-3 py-1 uppercase tracking-widest text-[10px]">
+                  Ficha Técnica Certificada
+                </Badge>
+                <h3 className="text-4xl font-headline font-bold">{selectedProduct?.variety}</h3>
+                <p className="text-white/80 font-light italic">{selectedProduct?.species}</p>
               </div>
             </div>
 
-            <div className="flex items-start gap-3 text-xs text-stone-500 bg-blue-50 p-3 rounded-lg">
-              <AlertCircle size={16} className="text-blue-600 flex-shrink-0" />
-              <p>El ciclo de producción biotecnológica es de 12-16 meses. Recibirás un cronograma detallado tras confirmar.</p>
+            {/* Content Column */}
+            <div className="w-full md:w-1/2 p-8 md:p-12 overflow-y-auto bg-white flex flex-col">
+              <div className="flex justify-between items-start mb-10">
+                <div>
+                  <h4 className="text-sm font-bold uppercase tracking-[0.2em] text-stone-400 mb-2">Código de Registro</h4>
+                  <p className="font-mono text-primary font-bold">{selectedProduct?.code}</p>
+                </div>
+                <div className="text-right">
+                  <h4 className="text-sm font-bold uppercase tracking-[0.2em] text-stone-400 mb-2">Precio Base</h4>
+                  <p className="text-3xl font-headline font-bold text-stone-900">S/ {selectedProduct?.base_price.toFixed(2)}</p>
+                  <p className="text-[10px] text-stone-400 uppercase tracking-tighter">I.G.V. Incluido</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-8 mb-12">
+                <div className="space-y-6">
+                  <div>
+                    <h5 className="text-[10px] font-bold uppercase tracking-widest text-primary mb-2 flex items-center gap-2">
+                       <ShieldCheck size={14}/> Certificación
+                    </h5>
+                    <p className="text-sm text-stone-700 font-semibold">{selectedProduct?.senasa_cert}</p>
+                  </div>
+                  <div>
+                    <h5 className="text-[10px] font-bold uppercase tracking-widest text-primary mb-2 flex items-center gap-2">
+                       <MapPin size={14}/> Región
+                    </h5>
+                    <p className="text-sm text-stone-700 font-semibold">{selectedProduct?.region}</p>
+                  </div>
+                </div>
+                <div className="space-y-6">
+                  <div>
+                    <h5 className="text-[10px] font-bold uppercase tracking-widest text-primary mb-2 flex items-center gap-2">
+                       <Clock size={14}/> Ciclo
+                    </h5>
+                    <p className="text-sm text-stone-700 font-semibold">{selectedProduct?.height}</p>
+                  </div>
+                  <div>
+                    <h5 className="text-[10px] font-bold uppercase tracking-widest text-primary mb-2 flex items-center gap-2">
+                       <Leaf size={14}/> Estado
+                    </h5>
+                    <p className="text-sm text-stone-700 font-semibold">{selectedProduct?.tolerance}</p>
+                  </div>
+                </div>
+              </div>
+
+              <Separator className="mb-10" />
+
+              <div className="flex-1 space-y-8">
+                {selectedProduct?.technical_details && (
+                  <div className="bg-stone-50 p-6 rounded-2xl border border-stone-200">
+                    <h5 className="text-xs font-bold uppercase tracking-widest text-[#2d4a22] mb-3 flex items-center gap-2">
+                       <Microscope size={14}/> Características del Cultivar
+                    </h5>
+                    <p className="text-sm text-stone-600 leading-relaxed font-light italic">
+                      {selectedProduct.technical_details}
+                    </p>
+                  </div>
+                )}
+
+                <div className="space-y-4">
+                  <h4 className="text-lg font-bold flex items-center gap-2">Reserva de Lote <Badge variant="outline" className="text-[10px]">PRE-ORDEN</Badge></h4>
+                  
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase text-stone-400">Tipo de Cliente</label>
+                    <Tabs value={userRole} onValueChange={(v: any) => setUserRole(v)}>
+                      <TabsList className="grid w-full grid-cols-2 h-12 rounded-xl bg-stone-50 border border-stone-100 p-1">
+                        <TabsTrigger value="agricultor" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">Agricultor</TabsTrigger>
+                        <TabsTrigger value="cooperativa" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">Cooperativa</TabsTrigger>
+                      </TabsList>
+                    </Tabs>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase text-stone-400">Cantidad (Plantas)</label>
+                    <div className="relative">
+                      <Input 
+                        type="number" 
+                        value={orderQuantity} 
+                        onChange={(e) => setOrderQuantity(Number(e.target.value))}
+                        min={100}
+                        className="h-14 rounded-xl pl-12 text-lg font-bold"
+                      />
+                      <Sprout size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-primary" />
+                    </div>
+                    {userRole === "cooperativa" && (
+                      <p className="text-[10px] text-primary italic font-medium">
+                        * Aplicando beneficio Cooperativo: 15% de descuento por volumen.
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="bg-[#FCFAF5] p-6 rounded-2xl border border-primary/10 flex justify-between items-center mt-auto">
+                  <div>
+                    <p className="text-xs text-stone-400 uppercase tracking-widest mb-1">Total Estimado</p>
+                    <p className="text-3xl font-headline font-bold text-primary">S/ {calculatePreviewPrice().toFixed(2)}</p>
+                  </div>
+                  <Button 
+                    className="h-14 px-8 rounded-xl bg-accent hover:bg-accent/90 text-white font-bold text-lg flex gap-3 shadow-lg"
+                    onClick={handleOrder}
+                  >
+                    Confirmar Reserva <ArrowRight size={20}/>
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
-
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setSelectedProduct(null)}>Cancelar</Button>
-            <Button className="bg-accent hover:bg-accent/90 text-white" onClick={handleOrder}>Confirmar Reserva</Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
 
