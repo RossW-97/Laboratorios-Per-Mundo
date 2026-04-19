@@ -173,7 +173,7 @@ export default function App() {
             >
               <Button 
                 size="lg" 
-                className="bg-accent hover:bg-accent/90 text-white rounded-full px-12 py-8 text-xl font-bold shadow-[0_0_40px_rgba(230,126,34,0.3)] group"
+                className="bg-primary hover:bg-primary/90 text-white rounded-full px-12 py-8 text-xl font-bold shadow-2xl group border-2 border-white/20"
                 onClick={() => setShowCover(false)}
               >
                 Explorar Ecosistema 
@@ -351,7 +351,7 @@ export default function App() {
                   href="#catalogo" 
                   className={cn(
                     buttonVariants({ size: "lg" }), 
-                    "bg-accent hover:bg-accent/90 text-white rounded-xl px-8 py-7 text-lg shadow-lg"
+                    "bg-accent hover:bg-accent/90 text-white rounded-2xl px-10 py-8 text-xl font-bold shadow-xl transition-all hover:scale-105 active:scale-95"
                   )}
                 >
                   Comprar plantas certificadas
