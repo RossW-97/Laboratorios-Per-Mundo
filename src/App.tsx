@@ -52,6 +52,7 @@ import {
   DialogFooter
 } from "@/components/ui/dialog";
 import { Product, TraceabilityLog, OrderResponse } from "./types";
+import { PRODUCTS } from "./data";
 
 export default function App() {
   const [showCover, setShowCover] = useState(true);
@@ -78,19 +79,15 @@ export default function App() {
 
   const fetchProducts = async () => {
     setLoading(true);
-    try {
-      const params = new URLSearchParams();
-      if (regionFilter) params.append("region", regionFilter);
-      if (growthFilter) params.append("growth_speed", growthFilter);
-      if (activeLine) params.append("line", activeLine);
-      const res = await fetch(`/api/catalogo?${params.toString()}`);
-      const data = await res.json();
-      setProducts(data);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    } finally {
+    // Simulate network delay
+    setTimeout(() => {
+      let filtered = [...PRODUCTS];
+      if (regionFilter) filtered = filtered.filter(p => p.region === regionFilter);
+      if (growthFilter) filtered = filtered.filter(p => p.growth_speed === growthFilter);
+      if (activeLine) filtered = filtered.filter(p => p.line === activeLine);
+      setProducts(filtered);
       setLoading(false);
-    }
+    }, 300);
   };
 
   if (showCover) {
@@ -204,41 +201,97 @@ export default function App() {
   const checkTraceability = async () => {
     if (!loteSearch) return;
     setTraceLoading(true);
-    try {
-      const res = await fetch(`/api/trazabilidad/${loteSearch}`);
-      if (res.ok) {
-        const data = await res.json();
-        setTraceabilityData(data);
+    
+    // Simulate reading from local storage or mock data
+    setTimeout(() => {
+      const savedOrders = JSON.parse(localStorage.getItem("lpm_orders") || "[]");
+      const order = savedOrders.find((o: any) => o.loteId === loteSearch);
+
+      if (order) {
+        const product = PRODUCTS.find(p => p.id === order.productId);
+        const mockLogs: TraceabilityLog[] = [
+          {
+            id: 1,
+            order_id: order.orderId,
+            lote_id: order.loteId,
+            stage: "Introducción in vitro",
+            description: "Inicio del ciclo de micropropagación en laboratorio.",
+            timestamp: new Date().toISOString(),
+            status: "En Proceso",
+            species: product?.species || "",
+            variety: product?.variety || "",
+            senasa_cert: product?.senasa_cert || ""
+          }
+        ];
+        setTraceabilityData(mockLogs);
       } else {
-        setTraceabilityData(null);
-        alert("Lote no encontrado");
+        // Fallback for demo ID
+        if (loteSearch === "LPM-DEMO-01") {
+          setTraceabilityData([
+            {
+              id: 99,
+              order_id: 0,
+              lote_id: "LPM-DEMO-01",
+              stage: "Fase de Enraizamiento",
+              description: "Las plántulas están desarrollando sistema radicular bajo condiciones controladas.",
+              timestamp: new Date().toISOString(),
+              status: "Producción",
+              species: "Musa AAB",
+              variety: "Curaré Enano",
+              senasa_cert: "SENASA-2024-001"
+            },
+            {
+              id: 98,
+              order_id: 0,
+              lote_id: "LPM-DEMO-01",
+              stage: "Introducción in vitro",
+              description: "Inicio del ciclo de micropropagación.",
+              timestamp: new Date(Date.now() - 86400000 * 5).toISOString(),
+              status: "Producción",
+              species: "Musa AAB",
+              variety: "Curaré Enano",
+              senasa_cert: "SENASA-2024-001"
+            }
+          ]);
+        } else {
+          setTraceabilityData(null);
+          alert("Lote no encontrado. Intente con LPM-DEMO-01");
+        }
       }
-    } catch (error) {
-      console.error("Error checking traceability:", error);
-    } finally {
       setTraceLoading(false);
-    }
+    }, 600);
   };
 
   const handleOrder = async () => {
     if (!selectedProduct) return;
-    try {
-      const res = await fetch("/api/pedidos", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          product_id: selectedProduct.id,
-          quantity: orderQuantity,
-          user_role: userRole,
-          user_id: 1 // Mock user
-        })
-      });
-      const data = await res.json();
-      setOrderResult(data);
+    setLoading(true);
+
+    setTimeout(() => {
+      const orderId = Math.floor(Math.random() * 10000);
+      const loteId = `LPM-${orderId}-${new Date().getFullYear()}${String(new Date().getMonth() + 1).padStart(2, '0')}`;
+      const deliveryMonths = selectedProduct.growth_speed === "Rápido" ? 12 : 16;
+      const estimatedDelivery = new Date();
+      estimatedDelivery.setMonth(estimatedDelivery.getMonth() + deliveryMonths);
+
+      const totalPrice = calculatePreviewPrice();
+      
+      const newOrder = {
+        orderId,
+        loteId,
+        totalPrice,
+        estimatedDelivery: estimatedDelivery.toISOString(),
+        productId: selectedProduct.id,
+        message: "Pedido procesado exitosamente con certificación SENASA vinculada."
+      };
+
+      // Save to localStorage so traceability works
+      const savedOrders = JSON.parse(localStorage.getItem("lpm_orders") || "[]");
+      localStorage.setItem("lpm_orders", JSON.stringify([...savedOrders, newOrder]));
+
+      setOrderResult(newOrder);
       setSelectedProduct(null);
-    } catch (error) {
-      console.error("Error placing order:", error);
-    }
+      setLoading(false);
+    }, 800);
   };
 
   const calculatePreviewPrice = () => {
@@ -321,8 +374,8 @@ export default function App() {
               initial={{ scale: 1.1 }}
               animate={{ scale: 1 }}
               transition={{ duration: 1.5 }}
-              src="https://picsum.photos/seed/amazon-rainforest-vibrant/1920/1080" 
-              alt="Amazon Rainforest" 
+              src="https://images.unsplash.com/photo-1582234327022-99ca802617a8?auto=format&fit=crop&q=80&w=1920" 
+              alt="Vivero de Musáceas" 
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
             />
@@ -648,19 +701,7 @@ export default function App() {
                   <Card className="h-full flex flex-col overflow-hidden border-border/50 hover:shadow-xl transition-all">
                     <div className="h-48 bg-muted relative overflow-hidden">
                       <img 
-                        src={product.variety === "Curaré Enano" 
-                          ? "https://lh3.googleusercontent.com/aida-public/AB6AXuD9_Vn-p9f9-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y" 
-                          : product.variety === "Red Banano Enano"
-                          ? "https://picsum.photos/seed/redbanana/600/400"
-                          : product.variety === "Isla Maleño"
-                          ? "https://picsum.photos/seed/islamaleno/600/400"
-                          : product.variety === "Palo Rosa"
-                          ? "https://picsum.photos/seed/aniba/600/400"
-                          : product.variety === "Cedro"
-                          ? "https://picsum.photos/seed/cedar-timber/600/400"
-                          : product.variety === "Caoba"
-                          ? "https://picsum.photos/seed/mahogany-premium/600/400"
-                          : `https://picsum.photos/seed/${product.variety}/600/400`} 
+                        src={product.image_url || `https://picsum.photos/seed/${product.variety}/600/400`} 
                         alt={product.variety}
                         className="w-full h-full object-cover"
                         referrerPolicy="no-referrer"
@@ -805,13 +846,7 @@ export default function App() {
             {/* Image Column (Reposicionada) */}
             <div className="w-full md:w-1/2 relative bg-stone-100 min-h-[300px] md:min-h-full">
               <img 
-                src={selectedProduct?.variety === "Curaré Enano" 
-                  ? "https://lh3.googleusercontent.com/aida-public/AB6AXuD9_Vn-p9f9-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y-f-Y" 
-                  : selectedProduct?.variety === "Red Banano Enano"
-                  ? "https://picsum.photos/seed/redbanana/1000/1000"
-                  : selectedProduct?.variety === "Isla Maleño"
-                  ? "https://picsum.photos/seed/islamaleno/1000/1000"
-                  : `https://picsum.photos/seed/${selectedProduct?.variety}/1000/1000`} 
+                src={selectedProduct?.image_url || `https://picsum.photos/seed/${selectedProduct?.variety}/1000/1000`} 
                 alt={selectedProduct?.variety}
                 className="absolute inset-0 w-full h-full object-cover"
                 referrerPolicy="no-referrer"

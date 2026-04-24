@@ -14,6 +14,7 @@ export interface Product {
   height: string;
   tolerance: string;
   technical_details?: string;
+  image_url?: string;
 }
 
 export interface TraceabilityLog {
